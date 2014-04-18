@@ -180,6 +180,14 @@ if !exists('g:BufKillCreateMappings')
   let g:BufKillCreateMappings = 1
 endif
 
+" g:BufKillCreateKeyMappings {{{2
+" If set to 1, creates the various mapleader-based mappings.  By default this
+" is set to 1 ('true') but users may want to set to 0 ('false') in order to
+" define their own mappings or to fix a mapping conflict with another plugin.
+if !exists('g:BufKillCreateKeyMappings')
+  let g:BufKillCreateKeyMappings = 1
+endif
+
 " g:BufKillCommandPrefix {{{2
 " A string that will act as the prefix to all BufKill user commands.  The
 " string must adhere to the user command guidelines established in the vim
@@ -192,38 +200,40 @@ endif
 
 " Commands {{{1
 "
-function! <SID>CreateUniqueCommand(lhs, rhs)
-  let command = g:BufKillCommandPrefix.a:lhs
-  if !exists(':'.command)
-    exe 'command -bang '.command.' '.a:rhs
-  endif
-endfunction
-call <SID>CreateUniqueCommand('A'   , ':call <SID>GotoBuffer(''#'',"<bang>")')
-call <SID>CreateUniqueCommand('B'   , ':call <SID>GotoBuffer(''bufback'',"<bang>")')
-call <SID>CreateUniqueCommand('F'   , ':call <SID>GotoBuffer(''bufforward'',"<bang>")')
-call <SID>CreateUniqueCommand('D'   , ':call <SID>BufKill(''bd'',"<bang>")')
-call <SID>CreateUniqueCommand('UN'  , ':call <SID>BufKill(''bun'',"<bang>")')
-call <SID>CreateUniqueCommand('D'   , ':call <SID>BufKill(''bd'',"<bang>")')
-call <SID>CreateUniqueCommand('W'   , ':call <SID>BufKill(''bw'',"<bang>")')
-call <SID>CreateUniqueCommand('UNDO', ':call <SID>UndoKill()')
+if g:BufKillCreateMappings == 1
+  function! <SID>CreateUniqueCommand(lhs, rhs)
+    let command = g:BufKillCommandPrefix.a:lhs
+    if !exists(':'.command)
+      exe 'command -bang '.command.' '.a:rhs
+    endif
+  endfunction
+  call <SID>CreateUniqueCommand('A'   , ':call <SID>GotoBuffer(''#'',"<bang>")')
+  call <SID>CreateUniqueCommand('B'   , ':call <SID>GotoBuffer(''bufback'',"<bang>")')
+  call <SID>CreateUniqueCommand('F'   , ':call <SID>GotoBuffer(''bufforward'',"<bang>")')
+  call <SID>CreateUniqueCommand('D'   , ':call <SID>BufKill(''bd'',"<bang>")')
+  call <SID>CreateUniqueCommand('UN'  , ':call <SID>BufKill(''bun'',"<bang>")')
+  call <SID>CreateUniqueCommand('D'   , ':call <SID>BufKill(''bd'',"<bang>")')
+  call <SID>CreateUniqueCommand('W'   , ':call <SID>BufKill(''bw'',"<bang>")')
+  call <SID>CreateUniqueCommand('UNDO', ':call <SID>UndoKill()')
+endif
 
 " Keyboard mappings {{{1
 "
-if g:BufKillCreateMappings == 1
-  noremap <Plug>BufKillAlt         :call <SID>GotoBuffer('#', '')<CR>
-  noremap <Plug>BufKillBangAlt     :call <SID>GotoBuffer('#', '!')<CR>
-  noremap <Plug>BufKillBack        :call <SID>GotoBuffer('bufback', '')<CR>
-  noremap <Plug>BufKillBangBack    :call <SID>GotoBuffer('bufback', '!')<CR>
-  noremap <Plug>BufKillForward     :call <SID>GotoBuffer('bufforward', '')<CR>
-  noremap <Plug>BufKillBangForward :call <SID>GotoBuffer('bufforward', '!')<CR>
-  noremap <Plug>BufKillBun         :call <SID>BufKill('bun', '')<CR>
-  noremap <Plug>BufKillBangBun     :call <SID>BufKill('bun', '!')<CR>
-  noremap <Plug>BufKillBd          :call <SID>BufKill('bd', '')<CR>
-  noremap <Plug>BufKillBangBd      :call <SID>BufKill('bd', '!')<CR>
-  noremap <Plug>BufKillBw          :call <SID>BufKill('bw', '')<CR>
-  noremap <Plug>BufKillBangBw      :call <SID>BufKill('bw', '!')<CR>
-  noremap <Plug>BufKillUndo        :call <SID>UndoKill()<CR>
+noremap <Plug>BufKillAlt         :call <SID>GotoBuffer('#', '')<CR>
+noremap <Plug>BufKillBangAlt     :call <SID>GotoBuffer('#', '!')<CR>
+noremap <Plug>BufKillBack        :call <SID>GotoBuffer('bufback', '')<CR>
+noremap <Plug>BufKillBangBack    :call <SID>GotoBuffer('bufback', '!')<CR>
+noremap <Plug>BufKillForward     :call <SID>GotoBuffer('bufforward', '')<CR>
+noremap <Plug>BufKillBangForward :call <SID>GotoBuffer('bufforward', '!')<CR>
+noremap <Plug>BufKillBun         :call <SID>BufKill('bun', '')<CR>
+noremap <Plug>BufKillBangBun     :call <SID>BufKill('bun', '!')<CR>
+noremap <Plug>BufKillBd          :call <SID>BufKill('bd', '')<CR>
+noremap <Plug>BufKillBangBd      :call <SID>BufKill('bd', '!')<CR>
+noremap <Plug>BufKillBw          :call <SID>BufKill('bw', '')<CR>
+noremap <Plug>BufKillBangBw      :call <SID>BufKill('bw', '!')<CR>
+noremap <Plug>BufKillUndo        :call <SID>UndoKill()<CR>
 
+if g:BufKillCreateKeyMappings == 1
   function! <SID>CreateUniqueMapping(lhs, rhs, ...)
     if hasmapto(a:rhs) && !(a:0 == 1 && a:1 == 'AllowDuplicate')
       " The user appears to have defined an alternate mapping for this command
