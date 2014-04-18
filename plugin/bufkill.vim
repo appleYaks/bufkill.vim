@@ -67,7 +67,7 @@
 " 1.11 - Major bug fixes by David Emett, especially relating to
 "        the creation of new buffers when the last buffer is killed.
 "        Also improved restoring of column on console vim.
-"        Key mappings can be disabled by setting g:BufKillCreateMappings to 0
+"        Key mappings can be disabled by setting g:BufKillCreateKeyMappings to 0
 " 1.10 - Various fixes, eg relating to quicklists
 " 1.9  - Remove unnecessary mapping delays, and a debug message
 " 1.8  - Improved mapping handling, and robustness
@@ -172,12 +172,12 @@ if !exists('g:BufKillVerbose')
   let g:BufKillVerbose = 1
 endif
 
-" g:BufKillCreateMappings {{{2
+" g:BufKillCreateCommandMappings {{{2
 " If set to 1, creates the various mapleader-based mappings.  By default this
 " is set to 1 ('true') but users may want to set to 0 ('false') in order to
 " define their own mappings or to fix a mapping conflict with another plugin.
-if !exists('g:BufKillCreateMappings')
-  let g:BufKillCreateMappings = 1
+if !exists('g:BufKillCreateCommandMappings')
+  let g:BufKillCreateCommandMappings = 1
 endif
 
 " g:BufKillCreateKeyMappings {{{2
@@ -200,7 +200,7 @@ endif
 
 " Commands {{{1
 "
-if g:BufKillCreateMappings == 1
+if g:BufKillCreateCommandMappings == 1
   function! <SID>CreateUniqueCommand(lhs, rhs)
     let command = g:BufKillCommandPrefix.a:lhs
     if !exists(':'.command)
